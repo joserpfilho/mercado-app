@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: mercado_db
+    environment:
+      POSTGRES_USER: mercado
+      POSTGRES_PASSWORD: mercado123
+      POSTGRES_DB: mercadodb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mercado_api
+    depends_on:
+      - postgres
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Default=Host=postgres;Database=mercadodb;Username=mercado;Password=mercado123
+      - Jwt__Secret=mercado_super_secret_key_2025!
+      - Jwt__ExpiresInDays=7
+
+volumes:
+  pgdata:
