@@ -26,6 +26,19 @@ public class ItemService(IItemRepository itemRepository, IGroupRepository groupR
         return Result<ItemResponse>.Success(new ItemResponse(item.Id, item.Name, item.Unit));
     }
 
+    public async Task<Result<bool>> DeleteAsync(Guid itemId)
+    {
+        var item = await itemRepository.GetByIdAsync(itemId);
+        if (item is null)
+            return Result<bool>.Failure("Item não encontrado.");
+
+        item.IsDeleted = true;
+        item.DeletedAt = DateTime.UtcNow;
+        await itemRepository.SaveChangesAsync();
+
+        return Result<bool>.Success(true);
+    }
+
     public async Task<Result<List<ItemResponse>>> GetByGroupAsync(Guid groupId)
     {
         var items = await itemRepository.GetByGroupIdAsync(groupId);

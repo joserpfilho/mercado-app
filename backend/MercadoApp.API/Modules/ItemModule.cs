@@ -37,5 +37,16 @@ public class ItemModule : ICarterModule
                 ? Results.Created($"/groups/{groupId}/items/{result.Value!.Id}", result.Value)
                 : Results.BadRequest(new { error = result.Error });
         });
+
+        group.MapDelete("/{itemId}", async (
+            Guid groupId,
+            Guid itemId,
+            [FromServices] ItemService itemService) =>
+        {
+            var result = await itemService.DeleteAsync(itemId);
+            return result.IsSuccess
+                ? Results.NoContent()
+                : Results.NotFound(new { error = result.Error });
+        });
     }
 }

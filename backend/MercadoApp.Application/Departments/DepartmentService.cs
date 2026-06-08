@@ -27,6 +27,19 @@ public class DepartmentService(IDepartmentRepository departmentRepository, IGrou
             new DepartmentResponse(department.Id, department.Name, department.Icon));
     }
 
+    public async Task<Result<bool>> DeleteAsync(Guid departmentId)
+    {
+        var department = await departmentRepository.GetByIdAsync(departmentId);
+        if (department is null)
+            return Result<bool>.Failure("Departamento não encontrado.");
+
+        department.IsDeleted = true;
+        department.DeletedAt = DateTime.UtcNow;
+        await departmentRepository.SaveChangesAsync();
+
+        return Result<bool>.Success(true);
+    }
+
     public async Task<Result<List<DepartmentResponse>>> GetByGroupAsync(Guid groupId)
     {
         var departments = await departmentRepository.GetByGroupIdAsync(groupId);
