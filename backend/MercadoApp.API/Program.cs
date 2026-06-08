@@ -1,4 +1,5 @@
 using System.Text;
+using Carter;
 using MercadoApp.Application;
 using MercadoApp.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,8 +12,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddCarter();
 
-var jwtSecret = builder.Configuration["Jwt__Secret"] ?? builder.Configuration["Jwt:Secret"]!;
+var jwtSecret = builder.Configuration["Jwt:Secret"]!;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -38,4 +40,5 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
+app.MapCarter();
 app.Run();
