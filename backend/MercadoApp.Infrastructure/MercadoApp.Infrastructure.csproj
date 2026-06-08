@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MercadoApp.Domain\MercadoApp.Domain.csproj" />
+    <ProjectReference Include="..\MercadoApp.Application\MercadoApp.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
