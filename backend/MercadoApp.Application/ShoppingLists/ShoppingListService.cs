@@ -113,6 +113,20 @@ public class ShoppingListService(
                 list.ListItems.Count, list.ListItems.Count(i => i.IsChecked)));
     }
 
+    public async Task<Result<ShoppingListSummaryResponse>> DeleteAsync(Guid listId)
+    {
+        var list = await shoppingListRepository.GetByIdWithItemsAsync(listId);
+        if (list is null)
+            return Result<ShoppingListSummaryResponse>.Failure("Lista não encontrada.");
+
+        list.Status = ListStatus.Deleted;
+        await shoppingListRepository.SaveChangesAsync();
+
+        return Result<ShoppingListSummaryResponse>.Success(
+            new ShoppingListSummaryResponse(list.Id, list.Name, list.CreatedAt, list.Status,
+                list.ListItems.Count, list.ListItems.Count(i => i.IsChecked)));
+    }
+
     private static ShoppingListResponse MapToResponse(ShoppingList list) =>
         new(list.Id, list.Name, list.CreatedAt, list.Status,
             list.ListItems.Select(li => new ListItemResponse(

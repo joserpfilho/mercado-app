@@ -91,5 +91,15 @@ public class ShoppingListModule : ICarterModule
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(new { error = result.Error });
         });
+        
+        list.MapDelete("/{id}/delete", async (
+            Guid id,
+            [FromServices] ShoppingListService service) =>
+        {
+            var result = await service.DeleteAsync(id);
+            return result.IsSuccess
+                ? Results.Ok(result.Value)
+                : Results.BadRequest(new { error = result.Error });
+        });
     }
 }
