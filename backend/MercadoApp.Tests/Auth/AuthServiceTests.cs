@@ -17,8 +17,16 @@ public class AuthServiceTests
     public AuthServiceTests()
     {
         _userRepository = Substitute.For<IUserRepository>();
-        _configuration = Substitute.For<IConfiguration>();
-        _configuration["Jwt:Secret"].Returns("mercado_super_secret_key_2025_abcdef!");
+
+        var inMemorySettings = new Dictionary<string, string?>
+        {
+            { "Jwt:Secret", "mercado_super_secret_key_2025_abcdef!" }
+        };
+
+        _configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(inMemorySettings)
+            .Build();
+
         _authService = new AuthService(_userRepository, _configuration);
     }
 
@@ -64,7 +72,7 @@ public class AuthServiceTests
             Id = Guid.NewGuid(),
             Name = "José",
             Email = "jose@email.com",
-            PasswordHash = BCrypt.HashPassword("123456")
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("123456")
         };
         _userRepository.GetByEmailAsync(request.Email).Returns(user);
 
@@ -102,7 +110,7 @@ public class AuthServiceTests
             Id = Guid.NewGuid(),
             Name = "José",
             Email = "jose@email.com",
-            PasswordHash = BCrypt.HashPassword("123456")
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("123456")
         };
         _userRepository.GetByEmailAsync(request.Email).Returns(user);
 
