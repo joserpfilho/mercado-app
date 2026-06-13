@@ -13,7 +13,8 @@ public class ShoppingListModule : ICarterModule
     {
         var lists = app.MapGroup("/groups/{groupId}/lists")
             .WithTags("ShoppingLists")
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .AddEndpointFilter<GroupMembershipFilter>();
 
         lists.MapGet("/", async (
             Guid groupId,

@@ -12,7 +12,8 @@ public class ItemModule : ICarterModule
     {
         var group = app.MapGroup("/groups/{groupId}/items")
             .WithTags("Items")
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .AddEndpointFilter<GroupMembershipFilter>();
 
         group.MapGet("/", async (
             Guid groupId,
