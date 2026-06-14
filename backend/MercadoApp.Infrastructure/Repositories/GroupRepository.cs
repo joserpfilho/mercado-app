@@ -12,6 +12,12 @@ public class GroupRepository(AppDbContext context) : IGroupRepository
             .Include(g => g.Members)
             .FirstOrDefaultAsync(g => g.Id == id);
 
+    public async Task<Group?> GetByIdWithMembersAsync(Guid id) =>
+        await context.Groups
+            .Include(g => g.Members)
+                .ThenInclude(m => m.User)
+            .FirstOrDefaultAsync(g => g.Id == id);
+
     public async Task<List<Group>> GetByUserIdAsync(Guid userId) =>
         await context.Groups
             .Where(g => g.Members.Any(m => m.UserId == userId))
@@ -19,6 +25,9 @@ public class GroupRepository(AppDbContext context) : IGroupRepository
 
     public async Task AddAsync(Group group) =>
         await context.Groups.AddAsync(group);
+
+    public async Task AddMemberAsync(GroupMember member) =>
+        await context.GroupMembers.AddAsync(member);
 
     public async Task SaveChangesAsync() =>
         await context.SaveChangesAsync();

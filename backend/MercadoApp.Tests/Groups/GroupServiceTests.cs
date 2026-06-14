@@ -10,12 +10,14 @@ namespace MercadoApp.Tests.Groups;
 public class GroupServiceTests
 {
     private readonly IGroupRepository _groupRepository;
+    private readonly IUserRepository _userRepository;
     private readonly GroupService _groupService;
 
     public GroupServiceTests()
     {
         _groupRepository = Substitute.For<IGroupRepository>();
-        _groupService = new GroupService(_groupRepository);
+        _userRepository = Substitute.For<IUserRepository>();
+        _groupService = new GroupService(_groupRepository, _userRepository);
     }
 
     [Fact]

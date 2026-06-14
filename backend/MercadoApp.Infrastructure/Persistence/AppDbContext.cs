@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using MercadoApp.Domain.Common;
 using MercadoApp.Domain.Entities;
+using MercadoApp.Infrastructure.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace MercadoApp.Infrastructure.Persistence;
@@ -19,23 +20,25 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
-        // Filtro global de soft delete
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
             {
-                modelBuilder.Entity(entityType.ClrType)
-                    .HasQueryFilter(
-                        Expression.Lambda(
-                            Expression.Equal(
-                                Expression.Property(
-                                    Expression.Parameter(entityType.ClrType, "e"),
-                                    nameof(ISoftDeletable.IsDeleted)),
-                                Expression.Constant(false)),
-                            Expression.Parameter(entityType.ClrType, "e")));
+                var method = typeof(AppDbContext)
+                    .GetMethod(nameof(GetSoftDeleteFilter), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)!
+                    .MakeGenericMethod(entityType.ClrType);
+
+                var filter = method.Invoke(null, null);
+                entityType.SetQueryFilter((LambdaExpression)filter!);
             }
         }
 
         base.OnModelCreating(modelBuilder);
+    }
+
+    private static LambdaExpression GetSoftDeleteFilter<TEntity>() where TEntity : class, ISoftDeletable
+    {
+        Expression<Func<TEntity, bool>> filter = e => !e.IsDeleted;
+        return filter;
     }
 }

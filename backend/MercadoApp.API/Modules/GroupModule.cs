@@ -41,5 +41,33 @@ public class GroupModule : ICarterModule
                 ? Results.Created($"/groups/{result.Value!.Id}", result.Value)
                 : Results.BadRequest(new { error = result.Error });
         });
+
+        group.MapGet("/{groupId}/members", async (
+            Guid groupId,
+            [FromServices] GroupService groupService) =>
+        {
+            var result = await groupService.GetMembersAsync(groupId);
+            return result.IsSuccess
+                ? Results.Ok(result.Value)
+                : Results.NotFound(new { error = result.Error });
+        })
+        .AddEndpointFilter<MercadoApp.API.Filters.GroupMembershipFilter>();
+
+        group.MapPost("/{groupId}/members", async (
+            Guid groupId,
+            [FromBody] AddMemberRequest request,
+            [FromServices] GroupService groupService,
+            [FromServices] IValidator<AddMemberRequest> validator) =>
+        {
+            var validation = await validator.ValidateAsync(request);
+            if (!validation.IsValid)
+                return Results.ValidationProblem(validation.ToDictionary());
+
+            var result = await groupService.AddMemberAsync(groupId, request);
+            return result.IsSuccess
+                ? Results.Created($"/groups/{groupId}/members/{result.Value!.UserId}", result.Value)
+                : Results.BadRequest(new { error = result.Error });
+        })
+        .AddEndpointFilter<MercadoApp.API.Filters.GroupMembershipFilter>();
     }
 }
