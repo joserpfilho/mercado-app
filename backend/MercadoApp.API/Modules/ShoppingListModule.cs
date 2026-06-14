@@ -1,5 +1,6 @@
 using Carter;
 using FluentValidation;
+using MercadoApp.API.Filters;
 using MercadoApp.Application.ShoppingLists;
 using MercadoApp.Application.ShoppingLists.DTOs;
 using MercadoApp.Domain.Enums;
@@ -43,7 +44,8 @@ public class ShoppingListModule : ICarterModule
 
         var list = app.MapGroup("/lists")
             .WithTags("ShoppingLists")
-            .RequireAuthorization();
+            .RequireAuthorization()
+            .AddEndpointFilter<ListMembershipFilter>();
 
         list.MapGet("/{id}", async (
             Guid id,
@@ -92,7 +94,7 @@ public class ShoppingListModule : ICarterModule
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(new { error = result.Error });
         });
-        
+
         list.MapDelete("/{id}/delete", async (
             Guid id,
             [FromServices] ShoppingListService service) =>

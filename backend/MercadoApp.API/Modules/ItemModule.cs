@@ -1,5 +1,6 @@
 using Carter;
 using FluentValidation;
+using MercadoApp.API.Filters;
 using MercadoApp.Application.Items;
 using MercadoApp.Application.Items.DTOs;
 using Microsoft.AspNetCore.Mvc;

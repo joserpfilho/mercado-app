@@ -1,5 +1,6 @@
 using System.Text;
 using Carter;
+using MercadoApp.API.Filters;
 using MercadoApp.API.Middleware;
 using MercadoApp.Application;
 using MercadoApp.Infrastructure;
@@ -52,6 +53,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddCarter();
 builder.Services.AddScoped<GroupMembershipFilter>();
+builder.Services.AddScoped<ListMembershipFilter>();
 
 var jwtSecret = builder.Configuration["Jwt:Secret"]!;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

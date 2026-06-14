@@ -8,7 +8,8 @@ namespace MercadoApp.Application.ShoppingLists;
 public class ShoppingListService(
     IShoppingListRepository shoppingListRepository,
     IGroupRepository groupRepository,
-    IItemRepository itemRepository)
+    IItemRepository itemRepository,
+    IDepartmentRepository departmentRepository)
 {
     public async Task<Result<ShoppingListSummaryResponse>> CreateAsync(
         CreateShoppingListRequest request, Guid groupId)
@@ -61,6 +62,16 @@ public class ShoppingListService(
         var item = await itemRepository.GetByIdAsync(request.ItemId);
         if (item is null)
             return Result<ShoppingListResponse>.Failure("Item não encontrado.");
+
+        if (item.GroupId != list.GroupId)
+            return Result<ShoppingListResponse>.Failure("Item não pertence ao grupo desta lista.");
+
+        var department = await departmentRepository.GetByIdAsync(request.DepartmentId);
+        if (department is null)
+            return Result<ShoppingListResponse>.Failure("Departamento não encontrado.");
+
+        if (department.GroupId != list.GroupId)
+            return Result<ShoppingListResponse>.Failure("Departamento não pertence ao grupo desta lista.");
 
         var listItem = new ListItem
         {
