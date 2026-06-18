@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { authApi } from "../api/auth";
 import { useAuthStore } from "../store/authStore";
 import { isAxiosError } from "axios";
+import { toast } from "../store/toastStore";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function RegisterPage() {
     try {
       const data = await authApi.register(name, email, password);
       setAuth(data.token, { name: data.name, email: data.email });
+      toast.success("Conta criada com sucesso!");
       navigate("/");
     } catch (err) {
       if (isAxiosError(err) && err.response?.data?.error) {

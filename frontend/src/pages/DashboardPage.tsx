@@ -8,6 +8,7 @@ import {
 import Header from "../components/Header";
 import Modal from "../components/Modal";
 import { ListStatus } from "../types";
+import { toast } from "../store/toastStore";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ export default function DashboardPage() {
     if (!name.trim()) return;
 
     const list = await createList.mutateAsync(name);
+    toast.success("Lista criada!");
     setIsModalOpen(false);
     setName("");
     navigate(`/lists/${list.id}`);

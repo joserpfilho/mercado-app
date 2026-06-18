@@ -16,6 +16,7 @@ import {
 import { ItemUnit, ItemUnitLabel } from "../types";
 import type { ListItemResponse } from "../types";
 import Modal from "../components/Modal";
+import { toast } from "../store/toastStore";
 
 export default function ListPage() {
   const { id } = useParams<{ id: string }>();
@@ -60,6 +61,8 @@ export default function ListPage() {
       quantity: parseFloat(quantity),
     });
 
+    toast.success("Item adicionado!");
+
     setIsAddItemOpen(false);
     setSelectedItemId("");
     setSelectedDeptId("");
@@ -74,6 +77,9 @@ export default function ListPage() {
       name: newItemName,
       unit: newItemUnit,
     });
+
+    toast.success(`Item "${newItemName}" criado!`);
+
     setSelectedItemId(item.id);
     setIsNewItemOpen(false);
     setNewItemName("");
@@ -88,6 +94,9 @@ export default function ListPage() {
       name: newDeptName,
       icon: newDeptIcon,
     });
+
+    toast.success(`Departamento "${newDeptName}" criado!`);
+
     setSelectedDeptId(dept.id);
     setIsNewDeptOpen(false);
     setNewDeptName("");
@@ -97,6 +106,7 @@ export default function ListPage() {
   const handleArchive = async () => {
     if (!confirm("Arquivar esta lista?")) return;
     await archiveList.mutateAsync(id!);
+    toast.success("Lista arquivada!");
     navigate("/");
   };
 

@@ -4,6 +4,7 @@ import { useGroups, useCreateGroup } from "../hooks/useGroups";
 import { useGroupStore } from "../store/groupStore";
 import { useAuthStore } from "../store/authStore";
 import Modal from "../components/Modal";
+import { toast } from "../store/toastStore";
 
 export default function GroupsPage() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function GroupsPage() {
 
     const group = await createGroup.mutateAsync(name);
     setActiveGroup(group.id, group.name);
+    toast.success(`Grupo "${group.name}" criado!`);
     setIsModalOpen(false);
     setName("");
     navigate("/");

@@ -6,20 +6,24 @@ import DashboardPage from "./pages/DashboardPage";
 import ListPage from "./pages/ListPage";
 import HistoryPage from "./pages/HistoryPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ToastContainer from "./components/ToastContainer";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+    <>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-      <Route element={<ProtectedRoute />}>
-        <Route path="/groups" element={<GroupsPage />} />
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/lists/:id" element={<ListPage />} />
-        <Route path="/history" element={<HistoryPage />} />
-      </Route>
-    </Routes>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/groups" element={<GroupsPage />} />
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/lists/:id" element={<ListPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+        </Route>
+      </Routes>
+      <ToastContainer />
+    </>
   );
 }
 
