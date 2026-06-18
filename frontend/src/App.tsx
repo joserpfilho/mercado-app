@@ -1,7 +1,11 @@
-import { Routes, Route } from 'react-router-dom'
-import LoginPage from './pages/LoginPage'
-import RegisterPage from './pages/RegisterPage'
-import ProtectedRoute from './components/ProtectedRoute'
+import { Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import GroupsPage from "./pages/GroupsPage";
+import DashboardPage from "./pages/DashboardPage";
+import ListPage from "./pages/ListPage";
+import HistoryPage from "./pages/HistoryPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -10,10 +14,13 @@ function App() {
       <Route path="/register" element={<RegisterPage />} />
 
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<div className="p-4">Dashboard (em construção)</div>} />
+        <Route path="/groups" element={<GroupsPage />} />
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/lists/:id" element={<ListPage />} />
+        <Route path="/history" element={<HistoryPage />} />
       </Route>
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;
