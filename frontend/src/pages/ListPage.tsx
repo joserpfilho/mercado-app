@@ -17,6 +17,7 @@ import { ItemUnit, ItemUnitLabel } from "../types";
 import type { ListItemResponse } from "../types";
 import Modal from "../components/Modal";
 import { toast } from "../store/toastStore";
+import ConfirmModal from "../components/ConfirmModal";
 
 export default function ListPage() {
   const { id } = useParams<{ id: string }>();
@@ -46,6 +47,8 @@ export default function ListPage() {
 
   const [newDeptName, setNewDeptName] = useState("");
   const [newDeptIcon, setNewDeptIcon] = useState("🛍️");
+
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
 
   const handleToggleCheck = (item: ListItemResponse) => {
     updateItem.mutate({ listItemId: item.id, isChecked: !item.isChecked });
@@ -147,7 +150,7 @@ export default function ListPage() {
           </button>
           <h1 className="font-semibold text-gray-800">{list?.name}</h1>
           <button
-            onClick={handleArchive}
+            onClick={() => setIsArchiveOpen(true)}
             className="text-sm text-gray-400 hover:text-red-500"
           >
             Arquivar
@@ -417,6 +420,17 @@ export default function ListPage() {
           </button>
         </form>
       </Modal>
+
+      <ConfirmModal
+        isOpen={isArchiveOpen}
+        onClose={() => setIsArchiveOpen(false)}
+        onConfirm={handleArchive}
+        title="Arquivar lista"
+        message={`Deseja arquivar "${list?.name}"? Ela será movida para o histórico.`}
+        confirmLabel="Arquivar"
+        danger
+        loading={archiveList.isPending}
+      />
     </div>
   );
 }

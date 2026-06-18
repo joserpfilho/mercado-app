@@ -7,6 +7,7 @@ import ListPage from "./pages/ListPage";
 import HistoryPage from "./pages/HistoryPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ToastContainer from "./components/ToastContainer";
+import GroupSettingsPage from "./pages/GroupSettingsPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/lists/:id" element={<ListPage />} />
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="/settings" element={<GroupSettingsPage />} />
         </Route>
       </Routes>
       <ToastContainer />

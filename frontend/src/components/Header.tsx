@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { useGroupStore } from "../store/groupStore";
 
 export default function Header() {
+  const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const logout = useAuthStore((s) => s.logout);
   const activeGroupName = useGroupStore((s) => s.activeGroupName);
 
   return (
@@ -16,10 +17,10 @@ export default function Header() {
           </h1>
         </div>
         <button
-          onClick={logout}
-          className="rounded-lg px-3 py-1.5 text-sm text-gray-500 hover:bg-gray-100"
+          onClick={() => navigate("/settings")}
+          className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
         >
-          Sair
+          ⚙️
         </button>
       </div>
     </header>
