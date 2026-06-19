@@ -18,6 +18,8 @@ import type { ListItemResponse } from "../types";
 import Modal from "../components/Modal";
 import { toast } from "../store/toastStore";
 import ConfirmModal from "../components/ConfirmModal";
+import ShoppingItemSkeleton from "../components/ShoppingItemSkeleton";
+import Skeleton from "../components/Skeleton";
 
 export default function ListPage() {
   const { id } = useParams<{ id: string }>();
@@ -131,8 +133,16 @@ export default function ListPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-gray-400">Carregando...</p>
+      <div className="min-h-screen bg-gray-50 pb-24">
+        <header className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
+          <Skeleton className="h-5 w-40 mx-auto" />
+        </header>
+        <div className="px-4 py-4 space-y-3">
+          <Skeleton className="h-3 w-20" />
+          <ShoppingItemSkeleton />
+          <ShoppingItemSkeleton />
+          <ShoppingItemSkeleton />
+        </div>
       </div>
     );
   }

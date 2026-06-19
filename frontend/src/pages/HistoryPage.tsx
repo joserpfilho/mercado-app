@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useGroupStore } from "../store/groupStore";
 import { useShoppingLists } from "../hooks/useShoppingLists";
 import { ListStatus } from "../types";
+import ListCardSkeleton from "../components/ListCardSkeleton";
 
 export default function HistoryPage() {
   const navigate = useNavigate();
@@ -26,7 +27,13 @@ export default function HistoryPage() {
       </header>
 
       <div className="px-4 py-4 space-y-2">
-        {isLoading && <p className="text-sm text-gray-400">Carregando...</p>}
+        {isLoading && (
+          <div className="space-y-2">
+            <ListCardSkeleton />
+            <ListCardSkeleton />
+            <ListCardSkeleton />
+          </div>
+        )}
 
         {lists?.map((list) => (
           <button

@@ -9,6 +9,7 @@ import Header from "../components/Header";
 import Modal from "../components/Modal";
 import { ListStatus } from "../types";
 import { toast } from "../store/toastStore";
+import ListCardSkeleton from "../components/ListCardSkeleton";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -53,7 +54,13 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {isLoading && <p className="text-sm text-gray-400">Carregando...</p>}
+        {isLoading && (
+          <div className="space-y-2">
+            <ListCardSkeleton />
+            <ListCardSkeleton />
+            <ListCardSkeleton />
+          </div>
+        )}
 
         <div className="space-y-2">
           {lists?.map((list) => (

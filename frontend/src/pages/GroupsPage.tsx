@@ -5,6 +5,8 @@ import { useGroupStore } from "../store/groupStore";
 import { useAuthStore } from "../store/authStore";
 import Modal from "../components/Modal";
 import { toast } from "../store/toastStore";
+import ListCardSkeleton from "../components/ListCardSkeleton";
+import Skeleton from "../components/Skeleton";
 
 export default function GroupsPage() {
   const navigate = useNavigate();
@@ -35,8 +37,12 @@ export default function GroupsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-gray-400">Carregando...</p>
+      <div className="min-h-screen bg-gray-50 px-4 py-8">
+        <div className="mx-auto max-w-sm space-y-2">
+          <Skeleton className="h-6 w-32 mb-4" />
+          <ListCardSkeleton />
+          <ListCardSkeleton />
+        </div>
       </div>
     );
   }
